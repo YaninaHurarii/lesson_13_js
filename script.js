@@ -17,23 +17,24 @@
  - При реалізації обов'язково використовуйте прийом делегування подій (на весь скрипт обробник подій повинен бути один).
 */
 const centeredContent = document.querySelector(".centered-content");
-const tabsContent = document.querySelector(".tabs-content").children;
+const tabsContent = document.querySelectorAll(".tabs-content li");
 const tabsTitle = document.querySelectorAll(".tabs-title");
 
-
 function selectTab(tab) {
-  let i = 0;
   for (const tabTitle of tabsTitle) {
     tabTitle.classList.remove("active");
-    tabsContent[i].style.display = "none";
-    i++;
+  }
+
+  for (const tabContent of tabsContent) {
+    tabContent.style.display = "none";
   }
 
   tabsTitle[tab].classList.add("active");
   tabsContent[tab].style.display = "block";
-};
+}
 
-if (centeredContent && tabsContent.length > 0 && tabsTitle.length === tabsContent.length) {
+if (
+  centeredContent && tabsContent.length > 0 && tabsTitle.length === tabsContent.length) {
   centeredContent.addEventListener("mousedown", (e) => {
     let tabTarget = e.target;
 
@@ -42,19 +43,11 @@ if (centeredContent && tabsContent.length > 0 && tabsTitle.length === tabsConten
     }
     if (!tabTarget) return;
 
-    let tabIndex;
-    
-    for (let i = 0; i < tabsTitle.length; i++) {
-      if (tabsTitle[i] === tabTarget) {
-        tabIndex = i;
-        break;
-      }
-    }
-
-    if (tabIndex !== undefined) {
-      selectTab(tabIndex);
+    const tabIndex = tabTarget.getAttribute("data-tab");
+    if (tabIndex !== null) {
+      selectTab(Number(tabIndex));
     }
   });
-
+  
   selectTab(0);
-} 
+}
